@@ -4,6 +4,14 @@
     ViewData["Title"] = "Index";
 }
 
+@section Scripts{
+    <script>
+        $("tr.WeaponList")
+        .on("mouseenter", function(){ $(this).addClass("highlight"); })
+        .on("mouseleave", function(){ $(this).removeClass("highlight"); });
+    </script>
+}
+
 <h1>@Locals["Title"]</h1>
 
 <p>

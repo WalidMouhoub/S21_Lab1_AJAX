@@ -17,10 +17,13 @@ namespace ZombieParty.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.18")
+                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("HuntingLogZombie", b =>
                 {
@@ -70,7 +73,7 @@ namespace ZombieParty.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -103,7 +106,8 @@ namespace ZombieParty.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -157,7 +161,9 @@ namespace ZombieParty.Migrations
 
                     b.ToTable("AspNetUsers", (string)null);
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+                    b.HasDiscriminator().HasValue("IdentityUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -166,7 +172,7 @@ namespace ZombieParty.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -247,7 +253,7 @@ namespace ZombieParty.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -270,7 +276,7 @@ namespace ZombieParty.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WeaponId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WeaponId"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -348,7 +354,7 @@ namespace ZombieParty.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Force")
                         .HasColumnType("int");
@@ -356,6 +362,9 @@ namespace ZombieParty.Migrations
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsFavorite")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -385,6 +394,7 @@ namespace ZombieParty.Migrations
                             Id = 1,
                             Force = 20,
                             Image = "",
+                            IsFavorite = false,
                             Name = "LeChuck",
                             Point = 5,
                             ShortDesc = "Pirate des Caraibes",
@@ -395,6 +405,7 @@ namespace ZombieParty.Migrations
                             Id = 2,
                             Force = 10,
                             Image = "Lenore.png",
+                            IsFavorite = false,
                             Name = "Lenore",
                             Point = 4,
                             ShortDesc = "Cute Little Dead Girl",
@@ -405,6 +416,7 @@ namespace ZombieParty.Migrations
                             Id = 3,
                             Force = 12,
                             Image = "Baron Samedi.png",
+                            IsFavorite = false,
                             Name = "Baron Samedi",
                             Point = 8,
                             ShortDesc = "En costume de soirée, avec un chapeau haut de forme blanc et des lunettes soleil",
@@ -415,6 +427,7 @@ namespace ZombieParty.Migrations
                             Id = 4,
                             Force = 5,
                             Image = "Draugr.png",
+                            IsFavorite = false,
                             Name = "Draugr",
                             Point = 2,
                             ShortDesc = "Vivant dans sa tombe grandant son trésor",
@@ -425,6 +438,7 @@ namespace ZombieParty.Migrations
                             Id = 5,
                             Force = 20,
                             Image = "",
+                            IsFavorite = false,
                             Name = "Ragamuffin.png",
                             Point = 5,
                             ShortDesc = "Ancien vampire transformé en poupée de chiffon, ami de Lenore",
@@ -435,6 +449,7 @@ namespace ZombieParty.Migrations
                             Id = 6,
                             Force = 5,
                             Image = "Mr Gosh.png",
+                            IsFavorite = false,
                             Name = "Mr Gosh",
                             Point = 6,
                             ShortDesc = "Tête de sac avec yeux en boutons, amoureux de Lenore",
@@ -445,6 +460,7 @@ namespace ZombieParty.Migrations
                             Id = 7,
                             Force = 12,
                             Image = "Taxidermy.png",
+                            IsFavorite = false,
                             Name = "Taxidermy",
                             Point = 1,
                             ShortDesc = "Tête de cerf empaillé, voisin de Lenore",
@@ -455,6 +471,7 @@ namespace ZombieParty.Migrations
                             Id = 8,
                             Force = 10,
                             Image = "Kitty.png",
+                            IsFavorite = false,
                             Name = "Kitty",
                             Point = 3,
                             ShortDesc = "Chat mort de Lenore",
@@ -465,6 +482,7 @@ namespace ZombieParty.Migrations
                             Id = 9,
                             Force = 20,
                             Image = "Singe zombie.png",
+                            IsFavorite = false,
                             Name = "Singe zombie",
                             Point = 2,
                             ShortDesc = "Voleur très rapide",
@@ -475,6 +493,7 @@ namespace ZombieParty.Migrations
                             Id = 10,
                             Force = 23,
                             Image = "",
+                            IsFavorite = false,
                             Name = "chien de l'enfer",
                             Point = 7,
                             ShortDesc = "chien très rapide, pouvant être enflammé",
@@ -485,6 +504,7 @@ namespace ZombieParty.Migrations
                             Id = 11,
                             Force = 15,
                             Image = "Avogadro.png",
+                            IsFavorite = false,
                             Name = "Avogadro",
                             Point = 9,
                             ShortDesc = "Attaque avec des éclairs suite à un orage",
@@ -495,6 +515,7 @@ namespace ZombieParty.Migrations
                             Id = 12,
                             Force = 10,
                             Image = "Lady Rose.png",
+                            IsFavorite = false,
                             Name = "Lady Rose",
                             Point = 6,
                             ShortDesc = "",
@@ -505,6 +526,7 @@ namespace ZombieParty.Migrations
                             Id = 13,
                             Force = 4,
                             Image = "Matbeth.png",
+                            IsFavorite = false,
                             Name = "Matbeth",
                             Point = 2,
                             ShortDesc = "Jeune étudiante qui cherche son professeur pour se venger",
@@ -515,6 +537,7 @@ namespace ZombieParty.Migrations
                             Id = 14,
                             Force = 5,
                             Image = "The Clown.png",
+                            IsFavorite = false,
                             Name = "The Clown",
                             Point = 5,
                             ShortDesc = "Le clown malheureux qui court après les enfants",
@@ -525,6 +548,7 @@ namespace ZombieParty.Migrations
                             Id = 15,
                             Force = 10,
                             Image = "Clicker.png",
+                            IsFavorite = false,
                             Name = "Clicker",
                             Point = 4,
                             ShortDesc = "Le comptable mécontent qui cherche les failles",
@@ -535,6 +559,7 @@ namespace ZombieParty.Migrations
                             Id = 16,
                             Force = 12,
                             Image = "TeamsZombie.png",
+                            IsFavorite = false,
                             Name = "TeamsZombie ",
                             Point = 10,
                             ShortDesc = "L'étudiant happé par Teams. Trop d'heures de vidéos ont transformé cet étudiant en zombie",
@@ -545,6 +570,7 @@ namespace ZombieParty.Migrations
                             Id = 17,
                             Force = 20,
                             Image = "Mathilde.png",
+                            IsFavorite = false,
                             Name = "Mathilde",
                             Point = 4,
                             ShortDesc = "La fêtarde du samedi soir qui cherche les fêtes et les bars en vogue",
@@ -558,7 +584,7 @@ namespace ZombieParty.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("IsDisponible")
                         .HasColumnType("bit");

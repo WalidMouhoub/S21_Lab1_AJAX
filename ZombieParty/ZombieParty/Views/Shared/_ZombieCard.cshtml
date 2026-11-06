@@ -1,8 +1,25 @@
 ﻿@model Zombie
 
+@section Scripts{
+    <script>
+        $(".detail-btn").on("click", function() {
+            let btn = $(this);
+            let idZombie = btn.attr("id");
+            $.get("/Zombie/Details", { "id": idZombie }, // Construction de la requête get
+                function(data) {
+                    $("#showmodal #content").html(data); // Insère data dans le div avec l’id content
+                    $("#showmodal").modal("show")        // Permet d’afficher le modal
+                });
+        });
+
+    </script>
+}
 <div class="col-lg-4 col-md-6 pb-4">
     <div class="card border-primary rounded shadow-sm" style="background: url('/images/imagesLayout/fond.png');">
         <div class="card-body px-3 pt-3 pb-1 row">
+            <div class="position-absolute">
+                 <a class="favorite @(Model.IsFavorite ? "text-primary": "text-dark")"><i class="fa-solid fa-heart-circle-plus"></i></a> 
+            </div>
             <p class="card-title text-center text-warning h5"><b>@Model.Name</b></p>
         </div>
         <img class="card-img-top img-fluid d-block mx-auto mb-3" src="@AppConstants.ImagePathViewsZombies@(string.IsNullOrWhiteSpace(Model.Image) ? AppConstants.ImageGeneric : Model.Image)" alt="Zombie photo" style="width:85%">
@@ -17,9 +34,12 @@
                 <p class="text-white">Points: <span><b class="">@Model.Point</b></span></p>
             </div>
         </div>
-        <a class="p-2 border w-100 btn btn-warning px-3">
-            <i class="fa-solid fa-pen-to-square"></i>&nbsp;@Locals["Details"]
+        <a class="detail-btn p-2 border w-100 btn btn-warning px-3"
+           id="@Model.Id">
+            <i class="fa-solid fa-circle-info"></i>
+            &nbsp;@Locals["Details"]
         </a>
+
         <a class="p-2 border w-100 btn btn-info px-3" asp-controller="Zombie" asp-action="Edit" asp-route-Id="@Model.Id">
             <i class="fa-solid fa-pen-to-square"></i>&nbsp;@Locals["Edit"]
         </a>

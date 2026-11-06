@@ -1,5 +1,29 @@
 ﻿@model IEnumerable<Zombie>
 
+
+@section Scripts {
+    <script>
+        $(".favorite").on("click", function() {
+            let baliseA = $(this);      // Allez chercher l'élément <a> qui a été cliqué.
+            //console.log(baliseA);     // Validation qu'on obtient bien l'élément voulu. (Voir console navigateur)
+            let idZombie = baliseA.attr("id");   // Obtenir l'id en utilisant attr sur l'élément <a> cliqué
+            //console.log(idZombie);    // Validation
+            $.post("/Zombie/Favorite", { "id": idZombie }, // Construction de la requête post car on modifie les données
+                function(data) {
+                    //console.log(data);    // Validation
+                    if (data) {
+                        baliseA.removeClass("text-dark");
+                        baliseA.addClass("text-primary");
+                    } else {
+                        baliseA.removeClass("text-primary");
+                        baliseA.addClass("text-dark");
+                    }
+                });
+        });
+    </script>
+}
+
+
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-10">
@@ -20,15 +44,26 @@
     </div>
 
     <div id="showmodal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document" style="background-color:white">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Zombie Details</h4>
-            </div>
-            <div class="container mt-3">
-                <div id="content"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Zombie Details</h4>
+                    <button type="button" class="btn-close"
+                            data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div id="content"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+
             </div>
         </div>
     </div>
